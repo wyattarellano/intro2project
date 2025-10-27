@@ -1,0 +1,54 @@
+#lang htdp/asl
+;Refactor the following function to be imperative:
+;; lon → number Purpose: Find the max of the given list
+#|(define (max-lon a-lon)
+  (local [;; lon number → number
+          ;; Purpose: Return max(max of given list, given number)
+          ;; Accumulator Invariant: accum = maximum in L - lst
+          (define (max-helper lst accum)
+            (if (empty? lst)
+                accum
+                (max-helper (rest lst) (max (first lst) accum))))]
+    (if (empty? a-lon)
+        (error max-lon "An empty lon does not have a maximum.")
+        (max-helper (rest a-lon) (first a-lon)))))
+(check-error (max-lon '())
+             "max-lon: An empty lon does not have a maximum.")
+(check-expect (max-lon '(83 77 392 92 832 49 -9837))
+              832)
+|#
+
+(define (max-lon a-lon)
+  (if (empty? a-lon)
+      (error "No max for an empty list")
+      (local[;;num
+         ;;Current Max
+         (define accum (void))
+         ;;lon
+         ;;List of unprocessed numbers
+         (define ul (void))
+         ;;-> num
+         ;;Purpose: Find max of a lon
+         ;;Effect: Accum is changed to the max of the accum and first of the unprocessed list
+         ;;Accumulator Invariant: accum = current max of the processed list
+         (define (max-state!)
+           ;;accum = current max of the processed list
+           (if (empty? ul)
+               ;;accum = current max of the processed list
+               (inexact->exact accum)
+               (begin
+                 ;;accum = current max of the processed list
+                 (set! accum (max (first ul) accum))
+                 (set! ul (rest ul))
+                 (max-state!))))]
+        (begin
+          (set! accum -inf.0)
+          (set! ul a-lon)
+          (max-state!)))))
+         
+               
+
+
+
+
+         

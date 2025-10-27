@@ -1,0 +1,17 @@
+#lang htdp/asl
+
+;; A (vectorof integers) (voi) is either:
+(define VEC1 (vector 1 10 2 3 4 6))
+(define VEC2 (vector 2 3 6 99 100 123 243 1 25 -4540 212))
+(define VEC3 (vector))
+
+(define (insertion-sort a-voi)
+  (local [(define low (void))
+          (define high (void))
+          
+          
+          (define (insert)
+            (if (<= high low)
+                (void)
+                (begin
+                  

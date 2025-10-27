@@ -1,0 +1,27 @@
+#lang htdp/isl+
+;; A node is a structure, (make-node X (btof X) (btof X)), with an X value and two 
+;; subtrees of X values.
+(define-struct node (val ltree rtree))
+
+;; sample instances of node
+(define NODE1 (make-node 4 '() '()))
+(define NODE2 (make-node 5 (make-node 3 '() '()) '()))
+(define NODE3 (make-node 3 (make-node 2 '() '()) '()))
+
+
+;; A binary tree is either:
+;;  1. '()
+;;  2. node
+
+(define Bitree (make-node 50 (make-node 25 (make-node 15 10 17)
+                                        (make-node 35 30 38))
+                          (make-node 75 (make-node 65 55 70)
+                                     (make-node 90 81 99))))
+
+;; A direction (dir) is either:
+;;  1. 'left
+;;  2. 'right
+
+
+;; A list of dir (lod) is either:
+;;  1. 

@@ -1,0 +1,57 @@
+#lang htdp/isl+
+;; lon --> lon
+;; Purpose: Sort given lon in nondecreasing order
+(define (merge-sorting a-lon)
+  (local [;; lon lon --> lon
+          ;; Purpose: Merge the given lons in nondecreasing order
+          ;; Assumption: Given lons are in nondecreasing order
+          (define (merge l1 l2)
+            (cond [(empty? l1) l2]
+                  [(empty? l2) l1]
+                  [(<= (first l1) (first l2))
+                   (cons (first l1) (merge (rest l1) l2))]
+                  [else (cons (first l2) (merge l1 (rest l2)))]))
+          ;; (listof lon) --> (listof lon)
+          ;; Purpose: Merge every two adjacent lons in nondecreasing order
+          ;; How: If the given (listof lon) has a length less
+          ;;      than 2 there are no lons to merge and the
+          ;;      answer is the given (listof lon). Otherwise,
+          ;;      the merging of the first two lons is added
+          ;;      to the front of the result of processing
+          ;;      all the remaining lons after the first two.
+          ;; Assumption: Nested lons are in nondecreasing order
+          (define (merge-neighs a-lolon)
+            (if (< (length a-lolon) 2)
+                a-lolon
+                (local [(define NEW-LOLON (rest (rest a-lolon)))]
+                  (cons (merge (first a-lolon) (second a-lolon))
+                        (merge-neighs NEW-LOLON)))))
+          ;; (listof lon) --> (listof lon)
+          ;; Purpose: Sort the numbers in the given (listof lon)
+          ;; How: If the length of the given (listof lon) is 1 return it.
+          ;;      Otherwise, every two neighboring lons are merged to
+          ;;      create a new problem instance that is recursively
+          ;;      processed.
+          ;; Assumption: The given (listof lon) has a length greater or equal to 1
+          (define (merge-sort-helper a-lolon)
+            (if (= (length a-lolon) 1)
+                a-lolon
+                (local [(define NEW-LOLON (merge-neighs a-lolon))]
+                  (merge-sort-helper NEW-LOLON))))]
+    (if (empty? a-lon)
+        '()
+        (first (merge-sort-helper (map (λ (n) (list n)) a-lon))))))
+
+(merge-sorting '(1 5 2 98 3))
+
+
+
+(define (merge-helper a-lon a-lon2)
+  (cond 
+        [(and (list? (first a-lon))
+              (not (empty? a-lon2)))
+         (append a-lon (list a-lon2))]
+        [(empty? a-lon) (list '())]
+        [(empty? a-lon2) (merge-helper (rest a-lon) (cons (first a-lon) a-lon2))]
+        [(>= (first a-lon) (first a-lon2)) (merge-helper (rest a-lon) (cons (first a-lon) a-lon2))]
+        [else (merge-helper (append a-lon (list (reverse a-lon2))) '())]))

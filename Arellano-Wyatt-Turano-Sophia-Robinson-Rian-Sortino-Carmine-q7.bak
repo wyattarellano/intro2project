@@ -1,0 +1,19 @@
+#lang htdp/isl+
+;; A listof Number is either:
+;; 1. '()
+;; 2. (cons Number lon)
+
+;; Sample instances of a lon
+(define EMPT-LON '())
+(define LON2 '(1 2 3 4))
+(define LON3 '(3 0 9 1))
+(define LON4 '(990999 29 1 10000))
+
+
+;; lon -> number
+;; Purpose: To find the maximum of a non-empty lon 
+;; Assumption: The given lon is not empty
+;; Accumulator Invariant: The max of the processed elements in the given lon
+(define (maxx a-lon)
+  (inexact->exact (foldl max -inf.0 a-lon)))
+
